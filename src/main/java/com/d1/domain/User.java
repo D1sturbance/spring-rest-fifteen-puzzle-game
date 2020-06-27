@@ -2,15 +2,11 @@ package com.d1.domain;
 
 import lombok.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+@Value
 public class User {
 
-    private long id;
-    private String name;
-    private Game game;
+    String id;
+    String name;
+    Game game;
 
 }

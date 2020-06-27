@@ -1,4 +1,8 @@
 package com.d1.domain;
 
-public class GameMove {
+public enum GameMove {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
 }

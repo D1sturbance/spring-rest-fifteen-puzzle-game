@@ -1,18 +1,10 @@
 package com.d1.domain;
 
-import lombok.*;
+import lombok.Value;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+@Value
 public class Game {
-
-    private String name;
-    private String move;
-    private int[][] puzzle;
-    private int x;
-    private int y;
-    private boolean isGameSolved;
+    String name;
+    boolean isSolved;
+    int[][] puzzle;
 }
