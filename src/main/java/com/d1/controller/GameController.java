@@ -1,6 +1,6 @@
 package com.d1.controller;
 
-import com.d1.domain.GameMove;
+import com.d1.domain.TileSlide;
 import com.d1.service.GameService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,8 +16,8 @@ public class GameController {
     }
 
     @PostMapping("/users/play-game")
-    public void makeMove(@RequestParam GameMove move, @RequestParam String id) {
-        gameService.move(move, id);
+    public void makeMove(@RequestParam TileSlide tileMove, @RequestParam String id) {
+        gameService.movePuzzleTile(tileMove, id);
     }
 
 }

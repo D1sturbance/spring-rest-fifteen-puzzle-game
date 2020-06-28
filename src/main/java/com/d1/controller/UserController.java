@@ -26,7 +26,7 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @PostMapping("/create-user")
+    @PostMapping("/user/create")
     public void create(@RequestParam String userName, @RequestParam String gameName) {
         userService.create(userName, gameName);
     }

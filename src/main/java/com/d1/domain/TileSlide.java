@@ -1,6 +1,6 @@
 package com.d1.domain;
 
-public enum GameMove {
+public enum TileSlide {
     UP,
     DOWN,
     LEFT,

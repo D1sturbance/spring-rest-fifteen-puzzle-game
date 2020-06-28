@@ -1,12 +1,13 @@
 package com.d1.service;
 
 import com.d1.domain.Game;
-import com.d1.domain.GameMove;
+import com.d1.domain.TileSlide;
 import com.d1.domain.User;
 import com.d1.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.awt.Point;
+
 
 @Service
 public class GameService {
@@ -17,11 +18,11 @@ public class GameService {
         this.userRepository = userRepository;
     }
 
-    public void move(GameMove gameMove, String userId) {
+    public void movePuzzleTile(TileSlide tileMove, String userId) {
         User user = userRepository.findById(userId);
-        int[][] movedPuzzle = makeMove(user.getGame().getPuzzle(), gameMove);
+        int[][] movedPuzzle = makeMove(user.getGame().getPuzzle(), tileMove);
         if (isSolved(movedPuzzle)) {
-            userRepository.replace(copyUser(
+            userRepository.update(copyUser(
                     userId,
                     user.getName(),
                     user.getGame().getName(),
@@ -29,7 +30,7 @@ public class GameService {
                     true
             ));
         } else {
-            userRepository.replace(copyUser(
+            userRepository.update(copyUser(
                     userId,
                     user.getName(),
                     user.getGame().getName(),
@@ -43,38 +44,44 @@ public class GameService {
         return new User(id, userName, new Game(gameName, isSolved, puzzle));
     }
 
-    private int[][] makeMove(int[][] puzzle, GameMove move) {
-        Point point = getColumnAndRowOfZero(puzzle);
-        int x = point.x;
-        int y = point.y;
+    private int[][] makeMove(int[][] puzzle, TileSlide tileMove) {
+        Point point = findPositionOfZero(puzzle);
         int tempZero;
-        switch (move) {
+        switch (tileMove) {
             case UP: {
-                if (y < 1) break;
-                tempZero = puzzle[y][x];
-                puzzle[y][x] = puzzle[y - 1][x];
-                puzzle[y - 1][x] = tempZero;
+                if (point.y < 1) {
+                    break;
+                }
+                tempZero = puzzle[point.y][point.x];
+                puzzle[point.y][point.x] = puzzle[point.y - 1][point.x];
+                puzzle[point.y - 1][point.x] = tempZero;
                 break;
             }
             case LEFT: {
-                if (x < 1) break;
-                tempZero = puzzle[y][x];
-                puzzle[y][x] = puzzle[y][x - 1];
-                puzzle[y][x - 1] = tempZero;
+                if (point.x < 1) {
+                    break;
+                }
+                tempZero = puzzle[point.y][point.x];
+                puzzle[point.y][point.x] = puzzle[point.y][point.x - 1];
+                puzzle[point.y][point.x - 1] = tempZero;
                 break;
             }
             case DOWN: {
-                if (y > puzzle.length - 2) break;
-                tempZero = puzzle[y][x];
-                puzzle[y][x] = puzzle[y + 1][x];
-                puzzle[y + 1][x] = tempZero;
+                if (point.y > puzzle.length - 2) {
+                    break;
+                }
+                tempZero = puzzle[point.y][point.x];
+                puzzle[point.y][point.x] = puzzle[point.y + 1][point.x];
+                puzzle[point.y + 1][point.x] = tempZero;
                 break;
             }
             case RIGHT: {
-                if (x > puzzle.length - 2) break;
-                tempZero = puzzle[y][x];
-                puzzle[y][x] = puzzle[y][x + 1];
-                puzzle[y][x + 1] = tempZero;
+                if (point.x > puzzle.length - 2) {
+                    break;
+                }
+                tempZero = puzzle[point.y][point.x];
+                puzzle[point.y][point.x] = puzzle[point.y][point.x + 1];
+                puzzle[point.y][point.x + 1] = tempZero;
                 break;
             }
         }
@@ -84,19 +91,24 @@ public class GameService {
     private boolean isSolved(int[][] puzzle) {
         for (int i = 0; i < puzzle.length; i++) {
             for (int j = 0; j < puzzle.length; j++) {
-                if (puzzle[j][i] == 0) continue;
-                if (puzzle[j][i] != 1 + j * puzzle.length + i) return false;
+                if (puzzle[j][i] == 0) {
+                    continue;
+                }
+                if (puzzle[j][i] != 1 + j * puzzle.length + i) {
+                    return false;
+                }
             }
         }
         return true;
     }
 
-    private Point getColumnAndRowOfZero(int[][] puzzle) {
+    private Point findPositionOfZero(int[][] puzzle) {
         Point point = new Point();
         for (int row = 0; row < puzzle.length; row++) {
             for (int col = 0; col < puzzle[0].length; col++) {
                 if (puzzle[row][col] == 0) {
                     point.setLocation(col, row);
+                    break;
                 }
             }
         }

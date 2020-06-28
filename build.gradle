@@ -1,13 +1,13 @@
 plugins {
     id 'java'
-  //  id "com.github.spotbugs" version "4.3.0"
+    id "com.github.spotbugs" version "4.4.3"
 }
 
-//apply plugin: 'checkstyle'
-//checkstyle {
-//    toolVersion '7.8.1'
-//    configFile file("config/checkstyle/checkstyle.xml")
-//}
+apply plugin: 'checkstyle'
+checkstyle {
+    toolVersion '7.8.1'
+    configFile file("config/checkstyle/checkstyle.xml")
+}
 
 group 'com.d1'
 version '1.0'
@@ -29,16 +29,16 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
-//tasks.withType(Checkstyle) {
-//    reports {
-//        xml.enabled false
-//        html.enabled true
-//    }
-//}
-//
-//checkstyleMain {
-//    source = 'src/main/java'
-//}
-//checkstyleTest {
-//    source = 'src/test/java'
-//}
+tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+checkstyleMain {
+    source = 'src/main/java'
+}
+checkstyleTest {
+    source = 'src/test/java'
+}

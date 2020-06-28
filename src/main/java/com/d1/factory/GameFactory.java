@@ -6,37 +6,39 @@ import org.springframework.stereotype.Component;
 import java.util.Random;
 
 @Component
-public class GameFactory {
-
-    public final int SIZE = 4;
+public final class GameFactory {
 
     public Game create(String name) {
-        return new Game(name, false, createPuzzle());
+        return new Game(
+                name,
+                false,
+                shuffleTiles(createPuzzle()));
     }
 
     private int[][] createPuzzle() {
-        int[][] puzzle = new int[SIZE][SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                puzzle[j][i] = 1 + j * SIZE + i;
+        int size = 4;
+        int[][] puzzle = new int[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                puzzle[j][i] = 1 + j * size + i;
             }
         }
-        puzzle[SIZE - 1][SIZE - 1] = 0;
-        shufflePuzzle(puzzle);
+        puzzle[size - 1][size - 1] = 0;
         return puzzle;
     }
 
-    private void shufflePuzzle(int[][] puzzle) {
+    private int[][] shuffleTiles(int[][] puzzle) {
         Random random = new Random();
         for (int k = puzzle.length - 1; k > 0; k--) {
             for (int j = puzzle[k].length - 1; j > 0; j--) {
-                int m = random.nextInt(k + 1);
-                int n = random.nextInt(j + 1);
+                int tileX = random.nextInt(k + 1);
+                int tileY = random.nextInt(j + 1);
 
                 int tmp = puzzle[k][j];
-                puzzle[k][j] = puzzle[m][n];
-                puzzle[m][n] = tmp;
+                puzzle[k][j] = puzzle[tileX][tileY];
+                puzzle[tileX][tileY] = tmp;
             }
         }
+        return puzzle;
     }
 }
